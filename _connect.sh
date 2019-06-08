@@ -20,7 +20,7 @@ declare -i available_index=0
 while read -r network_line; do
 	available[${available_index}]="${network_line#SSID: }"
 	available_index+=1
-done <<< $(iw dev wlp3s0 scan | grep "SSID:")
+done <<< $(iw dev "$wireless_interface" scan | grep "SSID:")
 
 
 # find the first saved among the available

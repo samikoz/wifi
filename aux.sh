@@ -1,6 +1,6 @@
 #!/bin/bash
 
-wireless_interface="wlp3s0"
+wireless_interface="wlo1"
 
 wifi_list="/home/sami/dev/bash/wifi/wifi.list"
 
