@@ -2,6 +2,13 @@
 
 source "/home/sami/dev/bash/wifi/aux.sh"
 
+call_init_if_necessary() {
+    declare -i call_init="$(is_network_interface_down)"
+    if [[ ${call_init} -eq 0 ]]; then
+        sudo bash -c "/home/sami/dev/bash/wifi/_init.sh"
+    fi
+}
+
 available_actions=("connect" "disconnect" "add" "delete" "saved" "available" "init")
 
 action="$1"
@@ -15,11 +22,12 @@ done
 
 
 for available in "${available_actions[@]}"; do
-	if [[ $action = $available ]]; then
+	if [[ ${action} = ${available} ]]; then
+	   	call_init_if_necessary
 		sudo bash -c "/home/sami/dev/bash/wifi/_${action}.sh ${remaining_params[*]}"
 		exit $?
 	fi
 done
 
-[[ -z $action ]] || wifi_log "unrecognised option '$action'"
+[[ -z ${action} ]] || wifi_log "unrecognised option '$action'"
 wifi_log "available options are: ${available_actions[*]}"
