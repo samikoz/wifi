@@ -16,11 +16,18 @@ print_available() {
 
 is_network_interface_down() {
     wireless_line="$(ip link | grep ${wireless_interface})"
-    wireless_line="${wireless_line#*state }"
-    wireless_state="${wireless_line%% *}"
+    wireless_line="${wireless_line#*<}"
+    wireless_line="${wireless_line%%>*}"
 
-    if [[ ${wireless_state} == "DOWN" ]]; then
-        printf "0\n"
-    else printf "1\n"
-    fi
+    IFS=,
+    for info in ${wireless_line}; do
+        if [[ ${info} == DOWN ]]; then
+            printf "0\n"
+            break
+        elif [[ ${info} == UP ]]; then
+            printf "1\n"
+            break
+        fi
+    done
+    unset IFS
 }
